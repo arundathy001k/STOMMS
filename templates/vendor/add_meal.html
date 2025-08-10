@@ -1,0 +1,14 @@
+<h2>Add New Meal</h2>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}  <!-- This will render the form fields automatically -->
+    <button type="submit">Add Meal</button>
+</form>
+
+{% if messages %}
+  <ul>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}

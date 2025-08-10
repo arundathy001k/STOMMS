@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+    <h1>Pay for your subscription</h1>
+    <p>Vendor: {{ subscription.vendor.business_name }}</p>
+    <p>Meal Plan: {{ subscription.meal_plan.name }}</p>
+    <p>Amount: ${{ subscription.meal_plan.price }}</p>
+
+    <!-- Payment form -->
+    <form id="payment-form">
+        <div id="card-element">
+            <!-- A Stripe Element will be inserted here. -->
+        </div>
+        <button id="submit">Pay</button>
+        <div id="error-message" role="alert"></div>
+    </form>
+
+    <script>
+        var stripe = Stripe('pk_test_51RFCsfQxh1MRmCKgg24g0DkOMROENe6hSOGE2wyrYA4jlMbenJMtkwWBh5DPlpvBDms4JTmHf1P6cVNXeBCXt3hX00bRKMAZJZ');  // Replace with your actual publishable key
+        var clientSecret = "{{ client_secret }}";
+
+        var elements = stripe.elements();
+        var card = elements.create('card');
+        card.mount('#card-element');
+
+        var form = document.getElementById('payment-form');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            stripe.confirmCardPayment(clientSecret, {
+                payment_method: {
+                    card: card,
+                    billing_details: {
+                        name: '{{ request.user.username }}',
+                    },
+                },
+            }).then(function(result) {
+                if (result.error) {
+                    
+                    document.getElementById('error-message').textContent = result.error.message;
+                } else {
+                    
+                    window.location.href = "/payment-success/";
+                }
+            });
+        });
+    </script>
+</body>
+</html>

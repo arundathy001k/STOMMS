@@ -1,0 +1,13 @@
+<!-- templates/vendor/add_daily_menu.html -->
+
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h4>Add Menu for {{ plan.name }} - Day {{ form.day_number.value }}</h4>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Save</button>
+    </form>
+</div>
+{% endblock %}

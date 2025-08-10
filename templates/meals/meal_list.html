@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>My Meals</h2>
+<a href="{% url 'add_meal' %}">Add New Meal</a>
+<ul>
+  {% for meal in meals %}
+    <li>
+      <strong>{{ meal.title }}</strong> ({{ meal.meal_type }}) - ₹{{ meal.price }}
+      <a href="{% url 'edit_meal' meal.pk %}">Edit</a> |
+      <a href="{% url 'delete_meal' meal.pk %}">Delete</a>
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}

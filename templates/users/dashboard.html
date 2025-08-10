@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MealMate - User Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f6f8;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .dashboard-section {
+            padding: 40px 60px;
+        }
+
+        .card {
+            border-radius: 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .profile-img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .vendor-card {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-5">
+    <a class="navbar-brand" href="{% url 'home' %}">MealMate</a>
+    <div class="ms-auto">
+        <a href="{% url 'home' %}" class="btn btn-outline-light">Logout</a>
+    </div>
+</nav>
+
+<!-- Dashboard -->
+<div class="dashboard-section">
+    <div class="mb-4">
+        <h2>Welcome, {{ request.user.get_full_name|default:request.user.username }}!</h2>
+        {% if user_profile %}
+            <p>Email: {{ request.user.email }}</p>
+            {% if user_profile.profile_picture %}
+                <img src="{{ user_profile.profile_picture.url }}" class="profile-img" alt="Profile Picture">
+            {% endif %}
+        {% endif %}
+        <a href="{% url 'edit_profile' %}" class="btn btn-secondary mt-2">Edit Profile</a>
+    </div>
+
+    <!-- Dashboard Cards -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card text-center p-4">
+                <h5>Browse Meals</h5>
+                <a href="{% url 'view_meals' %}" class="btn btn-primary mt-3">View Meals</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-center p-4">
+                <h5>My Subscriptions</h5>
+                <a href="{% url 'my_subscriptions' %}" class="btn btn-warning mt-3">Subscriptions</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-center p-4">
+                <h5>Order a Meal</h5>
+                <a href="{% url 'place_order' %}" class="btn btn-info mt-3">Place Order</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Available Vendors -->
+    <h3 class="mb-3">Available Vendors</h3>
+    <div class="row">
+        {% for vendor in vendor %}
+            <div class="col-md-4">
+                <div class="card vendor-card p-3">
+                    <h5>{{ vendor.business_name }}</h5>
+                    <p>{{ vendor.description|default:"No description available." }}</p>
+                    <a href="{% url 'subscribe_plan' vendor.id %}" class="btn btn-outline-success mt-2">Subscribe</a>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-muted">No vendors available at the moment.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Active Subscriptions -->
+    <div class="mt-5">
+        <h4>My Subscriptions</h4>
+        <div class="card p-3">
+            {% if subscriptions %}
+                <ul class="list-group">
+                    {% for sub in subscriptions %}
+                        <li class="list-group-item">
+                            <strong>Vendor:</strong> {{ sub.vendor.business_name }}<br>
+                            <strong>Plan:</strong> {{ sub.meal_plan.name }}<br>
+                            <strong>Status:</strong> {{ sub.status }}<br>
+                            <strong>Start:</strong> {{ sub.start_date }} - <strong>End:</strong> {{ sub.end_date }}<br>
+                            <strong>Created At:</strong> {{ sub.created_at|date:"F d, Y" }}<br>
+
+                            {% if sub.status == "Accepted" %}
+                                <a href="{% url 'start_payment' sub.id %}" class="btn btn-success btn-sm mt-2">Pay Now</a>
+                            {% elif sub.status == "Paid" %}
+                                <span class="badge bg-success mt-2">Payment Done ✅</span>
+                            {% else %}
+                                <span class="badge bg-warning mt-2">Pending</span>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted">You have no subscriptions yet.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="mt-5">
+        <h4>Notifications</h4>
+        <div class="card p-3">
+            {% if notifications %}
+                <ul class="list-group">
+                    {% for note in notifications %}
+                        <li class="list-group-item">{{ note.message }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted">No notifications yet.</p>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
