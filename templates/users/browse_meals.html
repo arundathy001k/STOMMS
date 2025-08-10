@@ -1,0 +1,19 @@
+{% block content %}
+<h2 class="mt-4">Browse Meals</h2>
+<div class="row">
+    {% for meal in meals %}
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <img src="{{ meal.image.url }}" class="card-img-top" alt="{{ meal.title }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ meal.title }}</h5>
+                    <p class="card-text">{{ meal.description }}</p>
+                    <p><strong>₹{{ meal.price }}</strong></p>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>No meals available at the moment.</p>
+    {% endfor %}
+</div>
+{% endblock %}

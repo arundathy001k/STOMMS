@@ -1,0 +1,97 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4 text-primary fw-bold">Manage Vendors</h2>
+
+    <div class="table-responsive shadow-sm rounded bg-white p-4">
+        <table class="table table-bordered table-hover align-middle text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Si.No</th>
+                    <th scope="col">Vendor Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Business Name</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for vendor in vendors %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ vendor.user.get_full_name|default:vendor.user.username }}</td>
+                    <td>{{ vendor.user.email }}</td>
+                    <td>{{ vendor.business_name }}</td>
+                    <td>{{ vendor.contact_number }}</td>
+                    <td>
+                        {% if vendor.is_active %}
+                            <span class="badge bg-success">Active</span>
+                        {% else %}
+                            <span class="badge bg-danger">Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'vendor_detail_admin' vendor.id %}" class="btn btn-sm btn-outline-primary">View</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-muted">No vendors found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="logout">
+    <a href="{% url 'dashboard' %}">Back to Admin Panel</a>
+</div>
+
+<style>
+    body {
+        background-color: #f1f3f5;
+    }
+
+    .table thead th {
+        vertical-align: middle;
+        font-size: 1rem;
+        color: rgb(160, 17, 17);
+    }
+
+    .table tbody tr:hover {
+        background-color: #e7f1ff;
+    }
+
+    .btn-outline-primary {
+        border: 1px solid #007bff;
+        color: #007bff;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .badge {
+        padding: 0.4em 0.7em;
+        font-size: 0.85rem;
+        border-radius: 0.5em;
+    }
+
+    .table {
+        font-size: 0.95rem;
+        border-radius: 8px;
+    }
+
+    .table-bordered {
+        border: 1px solid #dee2e6;
+    }
+
+    .table th, .table td {
+        padding: 15px;
+        text-align: center;
+    }
+</style>
+{% endblock %}

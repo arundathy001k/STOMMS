@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MealMate - Vendor Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .dashboard-card {
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: 0.3s ease;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-5">
+    <a class="navbar-brand" href="{% url 'home' %}">MealMate</a>
+    <div class="ms-auto">
+        <form action="{% url 'home' %}" method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-light">Logout</button>
+        </form>
+    </div>
+</nav>
+
+<div class="container py-5">
+    <h2 class="mb-4">Welcome, {{ request.user.first_name|default:request.user.username }} (Vendor)</h2>
+
+    <div class="row g-4">
+        <!-- Edit Profile Card -->
+        <div class="col-md-4">
+            <div class="card dashboard-card text-center p-3">
+                <h5>Edit Profile</h5>
+                <a href="{% url 'edit_vendor_profile' %}" class="btn btn-primary mt-3">Update Info</a>
+            </div>
+        </div>
+
+        <!-- Set Delivery Time Card -->
+        <div class="col-md-4">
+            <div class="card dashboard-card text-center p-3">
+                <h5>Set Delivery Time</h5>
+                <a href="{% url 'set_delivery_time' %}" class="btn btn-success mt-3">Set Time</a>
+            </div>
+        </div>
+
+        <!-- Manage Subscriptions Card -->
+        <div class="col-md-4">
+            <div class="card dashboard-card text-center p-3">
+                <h5>Manage Subscriptions</h5>
+                <a href="{% url 'manage_subscriptions' %}" class="btn btn-warning mt-3">View Requests</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Meals Section -->
+    <div class="row g-4 mt-4">
+        <!-- Display Meal Plans Added by Vendor -->
+        <div class="col-md-4">
+            <div class="card dashboard-card text-center p-3">
+                <h5>Meal Plans</h5>
+                {% if meal_plans %}
+                    <ul>
+                        {% for meal_plan in meal_plans %}
+                            <li>
+                                <strong>{{ meal_plan.name }}</strong><br>
+                                <p>{{ meal_plan.description }}</p>
+                                <p>Price: ${{ meal_plan.price }}</p>
+                                <a href="{% url 'edit_meal_plan' meal_plan.id %}" class="btn btn-info btn-sm">Edit</a> |
+                                <a href="{% url 'delete_meal_plan' meal_plan.id %}" class="btn btn-danger btn-sm">Delete</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>You haven't added any meal plans yet.</p>
+                    <a href="{% url 'add_meal_plan' %}" class="btn btn-primary mt-3">Add a New Meal Plan</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Add Meal Card -->
+        <div class="col-md-4">
+            <div class="card dashboard-card text-center p-3">
+                <h5>Meals Added by You</h5>
+                {% if meals %}
+                    <ul>
+                        {% for meal in meals %}
+                            <li>
+                                <strong>{{ meal.name }}</strong><br>
+                                <img src="{{ meal.image.url }}" alt="{{ meal.name }}" width="100">
+                                <p>{{ meal.description }}</p>
+                                <p>Price: ${{ meal.price }}</p>
+                                <a href="{% url 'edit_meal' meal.id %}" class="btn btn-info btn-sm">Edit</a> |
+                                <a href="{% url 'delete_meal' meal.id %}" class="btn btn-danger btn-sm">Delete</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>You haven't added any meals yet.</p>
+                    <a href="{% url 'add_meal' %}" class="btn btn-primary mt-3">Add a New Meal</a> <!-- Add Meal Link -->
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- View Meals Card -->
+        <div class="col-md-4">
+            <div class="card dashboard-card text-center p-3">
+                <h5>View Meals</h5>
+                <a href="{% url 'view_meals' %}" class="btn btn-info mt-3">View All Meals</a>
+            </div>
+        </div>
+
+        <!-- Notifications Card -->
+        <div class="col-md-4">
+            <div class="card dashboard-card text-center p-3">
+                <h2>Notifications</h2>
+{% if notifications %}
+    <ul>
+        {% for notification in notifications %}
+            <li>{{ notification.message }} ({{ notification.created_at }})</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No new notifications</p>
+{% endif %}
+
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

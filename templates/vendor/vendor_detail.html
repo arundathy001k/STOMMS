@@ -1,0 +1,49 @@
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow p-4 rounded-4">
+        <div class="row">
+            <div class="col-md-4 text-center">
+                {% if vendor.profile_picture %}
+                    <img src="{{ vendor.profile_picture.url }}" class="img-fluid rounded-circle mb-3" style="width: 200px; height: 200px;" alt="Vendor Image">
+                {% else %}
+                    <img src="{% static 'default_vendor.png' %}" class="img-fluid rounded-circle mb-3" style="width: 200px; height: 200px;" alt="Vendor Image">
+                {% endif %}
+                <h4 class="text-primary">{{ vendor.name }}</h4>
+                <p class="text-muted">{{ vendor.email }}</p>
+            </div>
+
+            <div class="col-md-8">
+                <h5 class="mb-3">Vendor Details</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>Phone:</strong> {{ vendor.phone }}</li>
+                    <li class="list-group-item"><strong>Address:</strong> {{ vendor.address }}</li>
+                    <li class="list-group-item"><strong>Delivery Time:</strong> {{ vendor.delivery_time }}</li>
+                </ul>
+
+                <hr>
+
+                <h5 class="mt-4 mb-3">Available Meals</h5>
+                {% if vendor.meal_set.all %}
+                    <ul class="list-group">
+                        {% for meal in vendor.meal_set.all %}
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>{{ meal.name }} - {{ meal.meal_type|title }}</span>
+                                <span>₹{{ meal.price }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No meals added yet.</p>
+                {% endif %}
+
+                <hr>
+
+                <a href="{% url 'subscribe_plan' vendor.id %}">Subscribe</a>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

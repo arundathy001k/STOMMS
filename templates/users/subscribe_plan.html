@@ -1,0 +1,21 @@
+
+{% block content %}
+    <h1>Subscribe to {{ vendor.business_name }}'s Meal Plans</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="meal_plan">Choose a Meal Plan:</label>
+            <select name="meal_plan" id="meal_plan" class="form-control">
+                {% for plan in meal_plans %}
+                    <option value="{{ plan.id }}">{{ plan.name }} - ${{ plan.price }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Subscribe</button>
+        <div class="logout">
+            <a href="{% url 'dashboard' %}">Back </a>
+        </div>
+    </form>
+    
+{% endblock %}

@@ -1,0 +1,5 @@
+<form method="POST" enctype="multipart/form-data">  <!-- Add enctype for file upload -->
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Meal Plan</button>
+</form>

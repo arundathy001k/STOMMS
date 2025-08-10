@@ -1,0 +1,90 @@
+
+{% block content %}
+<div class="container py-5">
+    <div class="card shadow-lg border-0 rounded-4 p-4" style="max-width: 800px; margin: auto;">
+        <div class="text-center mb-4">
+            <h2 class="text-dark fw-bold">Vendor Profile</h2>
+            <p class="text-muted">Detailed view of the vendor's business profile</p>
+        </div>
+
+        <div class="d-flex align-items-center justify-content-center mb-4">
+            {% if vendor.profile_image %}
+                <img src="{{ vendor.profile_image.url }}" alt="Vendor Image" class="rounded-circle shadow" style="width: 120px; height: 120px; object-fit: cover;">
+            {% else %}
+                <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center text-white shadow" style="width: 120px; height: 120px;">
+                    <span style="font-size: 2rem;">👤</span>
+                </div>
+            {% endif %}
+        </div>
+
+        <ul class="list-group list-group-flush mb-4">
+            <li class="list-group-item d-flex justify-content-between">
+                <strong>Name:</strong>
+                <span>{{ vendor.user.get_full_name|default:vendor.user.username }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+                <strong>Email:</strong>
+                <span>{{ vendor.user.email }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+                <strong>Business Name:</strong>
+                <span>{{ vendor.business_name }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+                <strong>Description:</strong>
+                <span>{{ vendor.business_description|default:"N/A" }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+                <strong>Contact Number:</strong>
+                <span>{{ vendor.contact_number }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+                <strong>Status:</strong>
+                <span>
+                    {% if vendor.is_active %}
+                        <span class="badge bg-success px-3 py-1">Active</span>
+                    {% else %}
+                        <span class="badge bg-danger px-3 py-1">Inactive</span>
+                    {% endif %}
+                </span>
+            </li>
+        </ul>
+
+        <div class="text-center">
+            <a href="{% url 'manage_vendors' %}" class="btn btn-primary px-4 py-2 rounded-pill shadow-sm">← Back to Vendor List</a>
+        </div>
+    </div>
+</div>
+
+<!-- Inline Styling for smooth feel -->
+<style>
+    body {
+        background-color: #f4f6f9;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .card {
+        background: #ffffff;
+        transition: 0.3s;
+    }
+
+    .card:hover {
+        transform: scale(1.01);
+    }
+
+    .list-group-item {
+        font-size: 1.05rem;
+        border: none;
+        padding: 12px 20px;
+    }
+
+    .btn-primary {
+        background-color: #4A90E2;
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background-color: #357ABD;
+    }
+</style>
+{% endblock %}

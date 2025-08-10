@@ -1,0 +1,19 @@
+<!-- templates/vendor/view_meals.html -->
+<h2>My Meals</h2>
+
+{% if meals %}
+  <ul>
+    {% for meal in meals %}
+      <li>
+        <strong>{{ meal.name }}</strong><br>
+        {{ meal.description }}<br>
+        ₹{{ meal.price }}<br>
+        {% if meal.image %}
+          <img src="{{ meal.image.url }}" width="100">
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No meals added yet.</p>
+{% endif %}

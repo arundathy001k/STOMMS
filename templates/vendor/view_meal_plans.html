@@ -1,0 +1,16 @@
+<h2>Meal Plans</h2>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Price</th>
+  </tr>
+  {% for meal_plan in meal_plans %}
+  <tr>
+    <td>{{ meal_plan.name }}</td>
+    <td>{{ meal_plan.description }}</td>
+    <td>{{ meal_plan.price }}</td>
+  </tr>
+  {% endfor %}
+</table>
